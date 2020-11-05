@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">PracticalDemo</string>
+    <string name="app_name">SampleTest</string>
+    <string name="user_info">User Info</string>
+    <string name="album_lable">Album</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.techand.practicaldemo
+package com.techand.sampletest
 
 import org.junit.Test
 

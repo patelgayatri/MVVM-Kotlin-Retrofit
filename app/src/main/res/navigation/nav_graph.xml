@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/UserInfoFragment">
+
+    <fragment
+        android:id="@+id/UserInfoFragment"
+        android:name="com.techand.sampletest.ui.userInfo.UserInfo"
+        android:label="@string/user_info"
+        tools:layout="@layout/recyclerview_layout">
+
+        <action
+            android:id="@+id/action_User_to_Album"
+            app:destination="@id/AlbumFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/AlbumFragment"
+        android:name="com.techand.sampletest.ui.albumList.AlbumFragment"
+        android:label="@string/album_lable"
+        tools:layout="@layout/recyclerview_layout">
+
+        <action
+            android:id="@+id/action_Album_to_Deatil"
+            app:destination="@id/AlbumDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/AlbumDetailFragment"
+        android:name="com.techand.sampletest.ui.albumDetail.AlbumDetail"
+        android:label="@string/album_lable"
+        tools:layout="@layout/album_detail_fragment">
+    </fragment>
+
+
+</navigation>

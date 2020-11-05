@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="album"
+            type="com.techand.sampletest.data.models.Album" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            android:background="@color/purple_500"
+            android:gravity="center_vertical"
+            android:padding="@dimen/normal_margin">
+
+            <ImageView
+                setImageUrl="@{album.thumbnailUrl}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                 />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:text="@{album.title}"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>
