@@ -7,4 +7,4 @@ Application is developed Using
 * Hilt
 * Kotlin Coroutines
 * RxJava
-
+* Navigation Component
