@@ -5,4 +5,6 @@ Application is developed Using
 * MVVM and Databinding
 * ViewModel and LiveData
 * Hilt
+* Kotlin Coroutines
+* RxJava
 
