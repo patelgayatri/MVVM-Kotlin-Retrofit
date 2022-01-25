@@ -9,6 +9,7 @@
             type="com.techand.sampletest.data.models.User" />
     </data>
     <RelativeLayout
+        android:id="@+id/item_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
@@ -22,18 +23,21 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/user_name"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{user.name_str()}" />
 
         <TextView
+            android:id="@+id/user_email"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{user.email_str()}" />
 
         <TextView
+            android:id="@+id/user_phone"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

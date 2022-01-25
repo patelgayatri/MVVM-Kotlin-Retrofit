@@ -2,7 +2,7 @@
 Application is developed Using
 * Kotlin
 * Retrofit2
-* MVVM and Databinding
+* mvvm architecture and Databinding
 * ViewModel and LiveData
 * Hilt
 * Kotlin Coroutines

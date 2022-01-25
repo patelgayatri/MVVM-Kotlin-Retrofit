@@ -30,7 +30,7 @@ class AlbumFragment : Fragment(), AlbumAdapter.Listener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewDataBinding = RecyclerviewLayoutBinding.inflate(inflater, container, false)
         return viewDataBinding.root
     }
