@@ -14,6 +14,10 @@
         <action
             android:id="@+id/action_UserInfoFragment_to_AlbumFragment"
             app:destination="@id/AlbumFragment" />
+        <argument
+            android:name="abc"
+            app:argType="string"
+            android:defaultValue='"0"' />
     </fragment>
     <fragment
         android:id="@+id/AlbumFragment"
@@ -25,7 +29,7 @@
             android:id="@+id/action_Album_to_Deatil"
             app:destination="@id/AlbumDetailFragment" />
         <argument
-            android:name="id"
+            android:name="abc"
             app:argType="string"
             android:defaultValue="0" />
     </fragment>

@@ -3,9 +3,8 @@ package com.techand.sampletest.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.espresso.OkHttp3IdlingResource
-import com.techand.sampletest.data.network.ApiService
+import com.techand.sampletest.data.network.Api
 import com.techand.sampletest.data.network.BASE_URL
-import com.techand.sampletest.data.repository.UserInfoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,11 +33,9 @@ object AppModule {
     @Provides
     fun provideGson(): Gson = GsonBuilder().create()
 
-    @Provides
-    fun provideNewsService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
 
     @Singleton
     @Provides
-    fun provideRepository(remoteDataSource: ApiService) =
-        UserInfoRepository(remoteDataSource)
+    fun playlistApi(retrofit: Retrofit): Api = retrofit.create(Api::class.java)
+
 }

@@ -4,18 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.techand.sampletest.R
 import com.techand.sampletest.data.models.Album
 import com.techand.sampletest.databinding.RecyclerviewLayoutBinding
 import com.techand.sampletest.ui.UserViewModel
-import com.techand.sampletest.utils.Resource
+import com.techand.sampletest.ui.userInfo.UserInfoArgs
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +27,7 @@ class AlbumFragment : Fragment(), AlbumAdapter.Listener {
     private lateinit var viewDataBinding: RecyclerviewLayoutBinding
     private lateinit var adapter: AlbumAdapter
     var albumId: Int = 0
-
+    val args: UserInfoArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,9 +48,7 @@ class AlbumFragment : Fragment(), AlbumAdapter.Listener {
 
 
     private fun setTitle() {
-        if (arguments != null) {
-            albumId = arguments?.getInt("ID")!!
-        }
+        albumId = args.abc.toInt()
         val toolbar = (requireActivity() as AppCompatActivity).supportActionBar
         toolbar?.title = "Album ID: $albumId"
         toolbar?.show()
@@ -62,25 +62,21 @@ class AlbumFragment : Fragment(), AlbumAdapter.Listener {
     }
 
     private fun setData() {
-        viewModel.getPhotos(albumId).observe(viewLifecycleOwner, {
-            it?.let { resource ->
-                when (resource.status) {
-                    Resource.Status.SUCCESS -> {
-                        resource.data?.let {
-                            retrieveList(it.body()!!)
-                            viewDataBinding.progressBar.visibility = View.GONE
-                        }
-                    }
-                    Resource.Status.ERROR -> {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                        viewDataBinding.progressBar.visibility = View.GONE
-
-                    }
-                    Resource.Status.LOADING -> {
-                        viewDataBinding.progressBar.visibility = View.VISIBLE
-                    }
-                }
+        viewModel.loader.observe(this as LifecycleOwner, { loading ->
+            when (loading) {
+                true -> viewDataBinding.progressBar.visibility = View.VISIBLE
+                else -> viewDataBinding.progressBar.visibility = View.GONE
             }
+        })
+        viewModel.getPhotos(albumId).observe(viewLifecycleOwner, {
+            if (it.getOrNull() != null)
+                retrieveList(it.getOrNull()!!)
+            else
+                Snackbar.make(
+                    viewDataBinding.progressBar,
+                    it.exceptionOrNull()?.message ?: "Error",
+                    Snackbar.LENGTH_LONG
+                ).show()
         })
     }
 

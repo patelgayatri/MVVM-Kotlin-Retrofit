@@ -4,21 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.techand.sampletest.R
 import com.techand.sampletest.data.models.User
 import com.techand.sampletest.databinding.RecyclerviewLayoutBinding
 import com.techand.sampletest.ui.UserViewModel
-import com.techand.sampletest.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Response
 
 @AndroidEntryPoint
 class UserInfo : Fragment(), UserInfoAdapter.Listener {
@@ -29,8 +26,8 @@ class UserInfo : Fragment(), UserInfoAdapter.Listener {
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         viewDataBinding = RecyclerviewLayoutBinding.inflate(inflater, container, false)
         return viewDataBinding.root
@@ -59,30 +56,29 @@ class UserInfo : Fragment(), UserInfoAdapter.Listener {
     }
 
     private fun setData() {
-        userViewModel.getUser().observe(viewLifecycleOwner, {
-            it?.let { resource ->
-                when (resource.status) {
-                    Resource.Status.SUCCESS -> {
-                        resource.data?.let { users ->
-                            retrieveList(users)
-                            viewDataBinding.progressBar.visibility = View.GONE
-                        }
-                    }
-                    Resource.Status.ERROR -> {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                        viewDataBinding.progressBar.visibility = View.GONE
-                    }
-                    Resource.Status.LOADING -> {
-                        viewDataBinding.progressBar.visibility = View.VISIBLE
-                    }
-                }
+        userViewModel.loader.observe(this as LifecycleOwner, { loading ->
+            when (loading) {
+                true -> viewDataBinding.progressBar.visibility = View.VISIBLE
+                else -> viewDataBinding.progressBar.visibility = View.GONE
             }
+        })
+        userViewModel.getUser().observe(viewLifecycleOwner, {
+            if (it.getOrNull() != null) {
+                retrieveList(it.getOrNull())
+            } else {
+                Snackbar.make(
+                    viewDataBinding.progressBar,
+                    it.exceptionOrNull()?.message ?: "Error",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+
         })
     }
 
-    private fun retrieveList(users: Response<List<User>>) {
+    private fun retrieveList(users: List<User>?) {
         adapter.apply {
-            addUsers(users.body()!!)
+            users?.let { addUsers(it) }
             notifyDataSetChanged()
         }
     }
