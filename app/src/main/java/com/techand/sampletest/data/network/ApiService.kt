@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 class ApiService @Inject constructor(val api: Api) {
 
-    @ExperimentalCoroutinesApi
     suspend fun fetchUsers(): Flow<Result<List<User>>> {
         return flow {
             emit(Result.success(api.getUserData()))
@@ -19,7 +18,6 @@ class ApiService @Inject constructor(val api: Api) {
         }
     }
 
-    @ExperimentalCoroutinesApi
     suspend fun fetchPhotos(albumId: String): Flow<Result<List<Album>>> {
         return flow {
             emit(Result.success(api.getPhotos(albumId)))

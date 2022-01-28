@@ -23,27 +23,39 @@ class UserViewModelTest : BaseUnitTest() {
     private var repository: UserInfoRepository = mock()
     private var users = mock<List<User>>()
     private var expectedUsers = Result.success(users)
+    private var exception = RuntimeException("Error")
 
 
     @Before
-    fun setUp(){
+    fun setUp() {
         viewModel = UserViewModel(repository)
     }
 
     @Test
     fun getDataFromRepository() = runBlockingTest {
-        whenever(repository.getUser()).thenReturn(flow {
-            emit(expectedUsers)
-        })
+        mockSuccessfulCase()
         viewModel.getUser().getValueForTest()
         verify(repository, times(1)).getUser()
     }
+
     @Test
     fun emitUsersFromRepository() = runBlockingTest {
+        mockSuccessfulCase()
+        assertEquals(expectedUsers, viewModel.getUser().getValueForTest())
+    }
+
+    @Test
+    fun emitErrorFromRepository() = runBlockingTest {
+        whenever(repository.getUser()).thenReturn(flow {
+            emit(Result.failure<List<User>>(exception))
+        })
+        assertEquals(exception, viewModel.getUser().getValueForTest()?.exceptionOrNull())
+    }
+
+    private suspend fun mockSuccessfulCase() {
         whenever(repository.getUser()).thenReturn(flow {
             emit(expectedUsers)
         })
-        assertEquals(expectedUsers,viewModel.getUser().getValueForTest())
     }
 
 }
